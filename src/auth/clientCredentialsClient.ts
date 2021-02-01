@@ -6,7 +6,7 @@ import * as querystring from 'querystring';
 import ICredentials from './credentials';
 import OAuth2client from './oAuth2client';
 
-const debug = createDebug('ttts-api-nodejs-client:auth:clientCredentialsClient');
+const debug = createDebug('@alverca/sdk:auth:clientCredentialsClient');
 
 export interface IOptions {
     domain: string;
