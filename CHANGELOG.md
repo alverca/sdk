@@ -10,17 +10,23 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 
-- @alverca/sdkとして再リリース
-
 ### Deprecated
 
 ### Removed
 
-- パフォーマンスサービスを削除
-
 ### Fixed
 
 ### Security
+
+## v10.0.0 - 2021-02-01
+
+### Changed
+
+- @alverca/sdkとして再リリース
+
+### Removed
+
+- パフォーマンスサービスを削除
 
 ## v9.3.0 - 2021-01-20
 
