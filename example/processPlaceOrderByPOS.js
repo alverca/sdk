@@ -3,9 +3,9 @@
  */
 const httpStatus = require('http-status');
 const moment = require('moment');
-const tttsapi = require('../lib/index');
+const alvercaapi = require('../lib/index');
 
-const auth = new tttsapi.auth.ClientCredentials({
+const auth = new alvercaapi.auth.ClientCredentials({
     domain: process.env.TEST_AUTHORIZE_SERVER_DOMAIN,
     clientId: process.env.TEST_CLIENT_ID,
     clientSecret: process.env.TEST_CLIENT_SECRET,
@@ -13,7 +13,7 @@ const auth = new tttsapi.auth.ClientCredentials({
     state: 'teststate'
 });
 
-const eventService = new tttsapi.service.Event({
+const alvercaService = new alvercaapi.service.SalesReport({
     endpoint: process.env.TEST_API_ENDPOINT,
     auth: auth
 });
@@ -23,7 +23,7 @@ async function main() {
         .add(30, 'day')
         .format('YYYYMMDD');
 
-    let searchPerformancesResult = await eventService.fetch({
+    let searchPerformancesResult = await alvercaService.fetch({
         uri: '/performances',
         method: 'GET',
         qs: { day: day },
@@ -44,7 +44,7 @@ async function main() {
     }
 
     console.log('パフォーマンスを決めています...');
-    searchPerformancesResult = await eventService.fetch({
+    searchPerformancesResult = await alvercaService.fetch({
         uri: '/performances',
         method: 'GET',
         qs: { performanceId: performance.id },
@@ -60,7 +60,7 @@ async function main() {
     console.log('取引を開始します... パフォーマンス:', performance.id);
 
     // 取引開始
-    const transaction = await eventService.fetch({
+    const transaction = await alvercaService.fetch({
         uri: '/transactions/placeOrder/start',
         method: 'POST',
         body: {
@@ -78,7 +78,7 @@ async function main() {
 
     await wait(1000);
     let ticketType = performance.attributes.ticket_types.find((t) => t.id === '001');
-    let seatReservationAuthorizeAction = await eventService.fetch({
+    let seatReservationAuthorizeAction = await alvercaService.fetch({
         uri: `/transactions/placeOrder/${transaction.id}/actions/authorize/seatReservation`,
         method: 'POST',
         body: {
@@ -96,7 +96,7 @@ async function main() {
     console.log('券種を変更しています...');
     await wait(1000);
     // 仮予約削除
-    await eventService.fetch({
+    await alvercaService.fetch({
         uri: `/transactions/placeOrder/${transaction.id}/actions/authorize/seatReservation/${seatReservationAuthorizeAction.id}`,
         method: 'DELETE',
         body: {
@@ -112,7 +112,7 @@ async function main() {
 
     // 再仮予約
     // ticketType = performance.attributes.ticket_types[0];
-    seatReservationAuthorizeAction = await eventService.fetch({
+    seatReservationAuthorizeAction = await alvercaService.fetch({
         uri: `/transactions/placeOrder/${transaction.id}/actions/authorize/seatReservation`,
         method: 'POST',
         body: {
@@ -137,7 +137,7 @@ async function main() {
         tel: '+819012345678',
         gender: '0'
     };
-    customerContact = await eventService.fetch({
+    customerContact = await alvercaService.fetch({
         uri: `/transactions/placeOrder/${transaction.id}/customerContact`,
         method: 'PUT',
         body: customerContact,
@@ -149,7 +149,7 @@ async function main() {
     // 確定
     console.log('最終確認しています...');
     await wait(1000);
-    const transactionResult = await eventService.fetch({
+    const transactionResult = await alvercaService.fetch({
         uri: `/transactions/placeOrder/${transaction.id}/confirm`,
         method: 'POST',
         body: {},
@@ -162,7 +162,7 @@ async function main() {
 
     // すぐに注文返品
     console.log('返品しています...');
-    await eventService.fetch({
+    await alvercaService.fetch({
         uri: `/transactions/returnOrder/confirm`,
         method: 'POST',
         body: {

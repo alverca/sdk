@@ -7,11 +7,11 @@ import { BAD_REQUEST, FORBIDDEN, OK, UNAUTHORIZED } from 'http-status';
 import * as fetch from 'isomorphic-fetch';
 import * as querystring from 'querystring';
 
-import { Auth, transporters } from '@motionpicture/ttts-api-abstract-client';
+import { Auth, transporters } from '@alverca/abstract-sdk';
 import ICredentials from './credentials';
 import { ITokenPayload, LoginTicket } from './loginTicket';
 
-const debug = createDebug('ttts-api-nodejs-client:auth:oAuth2client');
+const debug = createDebug('@alverca/sdk:auth:oAuth2client');
 
 export interface IGenerateAuthUrlOpts {
     scopes: string[];

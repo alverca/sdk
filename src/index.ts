@@ -1,7 +1,7 @@
 /**
- * TTTS API Node.js Client
+ * Alverca API Node.js Client
  */
-import * as tttsapi from '@motionpicture/ttts-api-abstract-client';
+import * as alvercaapi from '@alverca/abstract-sdk';
 
 import ClientCredentialsClient from './auth/clientCredentialsClient';
 import OAuth2client from './auth/oAuth2client';
@@ -11,9 +11,9 @@ import OAuth2client from './auth/oAuth2client';
  * All object interfaces are here.
  * 全てのオブジェクトのインターフェースはここに含まれます。
  */
-export import factory = tttsapi.factory;
-export import service = tttsapi.service;
-export import transporters = tttsapi.transporters;
+export import factory = alvercaapi.factory;
+export import service = alvercaapi.service;
+export import transporters = alvercaapi.transporters;
 
 /**
  * each OAuth2 clients

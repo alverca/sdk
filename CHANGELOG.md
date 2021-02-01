@@ -10,9 +10,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 
+- @alverca/sdkとして再リリース
+
 ### Deprecated
 
 ### Removed
+
+- パフォーマンスサービスを削除
 
 ### Fixed
 
