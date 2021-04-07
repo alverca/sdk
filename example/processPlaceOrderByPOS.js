@@ -19,8 +19,48 @@ const alvercaService = new alvercaapi.service.SalesReport({
 });
 
 async function main() {
+    // console.log('コンテンツを検索しています...');
+    // const searchMoviesResult = await alvercaService.fetch({
+    //     uri: '/creativeWorks/movie',
+    //     method: 'GET',
+    //     qs: {
+    //         limit: 100,
+    //     },
+    //     expectedStatusCodes: [httpStatus.OK]
+    // })
+    //     .then(async (response) => {
+    //         return {
+    //             data: await response.json()
+    //         };
+    //     });
+    // console.log(searchMoviesResult.data);
+    // console.log(searchMoviesResult.data.length);
+
+    // return;
+
+    // console.log('パフォーマンスを決めています...');
+    // const searchEventsResult = await alvercaService.fetch({
+    //     uri: '/events',
+    //     method: 'GET',
+    //     qs: {
+    //         limit: 100,
+    //         startFrom: moment().add(3, 'day').toDate(),
+    //         startThrough: moment().add(4, 'day').toDate(),
+    //     },
+    //     expectedStatusCodes: [httpStatus.OK]
+    // })
+    //     .then(async (response) => {
+    //         return {
+    //             data: await response.json()
+    //         };
+    //     });
+    // console.log(searchEventsResult.data);
+    // console.log(searchEventsResult.data.length);
+
+    // return;
+
     const day = moment()
-        .add(30, 'day')
+        .add(1, 'day')
         .format('YYYYMMDD');
 
     let searchPerformancesResult = await alvercaService.fetch({
@@ -38,7 +78,7 @@ async function main() {
     const performances = searchPerformancesResult.data.data;
     console.log(performances);
 
-    let performance = performances.find((p) => p.attributes.seat_status > 0);
+    let performance = performances.find((p) => p.attributes.seat_status > 8 && p.attributes.online_sales_status === 'Normal');
     if (performance === undefined) {
         throw new Error('予約可能なパフォーマンスが見つかりません。');
     }
@@ -130,21 +170,22 @@ async function main() {
     // 購入者情報登録
     console.log('購入者情報を入力しています...');
     await wait(1000);
-    let customerContact = {
-        last_name: 'POSせい',
-        first_name: 'POSめい',
+    let profile = {
+        last_name: 'POS',
+        first_name: '購入',
         email: 'hello@motionpicture.jp',
-        tel: '+819012345678',
-        gender: '0'
+        tel: '09012345678',
+        gender: '1',
+        address: 'JP'
     };
-    customerContact = await alvercaService.fetch({
+    profile = await alvercaService.fetch({
         uri: `/transactions/placeOrder/${transaction.id}/customerContact`,
         method: 'PUT',
-        body: customerContact,
+        body: profile,
         expectedStatusCodes: [httpStatus.CREATED]
     })
         .then(async (response) => response.json());
-    console.log('購入者情報が登録されました。', customerContact.tel);
+    console.log('購入者情報が登録されました。', profile);
 
     // 確定
     console.log('最終確認しています...');
@@ -156,9 +197,9 @@ async function main() {
         expectedStatusCodes: [httpStatus.CREATED]
     })
         .then(async (response) => response.json());
-    console.log('取引確定です。', transactionResult.eventReservations[0].payment_no);
+    console.log('取引確定です。', transactionResult.orderNumber, transactionResult.eventReservations[0].payment_no);
 
-    await wait(3000);
+    await wait(10000);
 
     // すぐに注文返品
     console.log('返品しています...');
@@ -166,8 +207,10 @@ async function main() {
         uri: `/transactions/returnOrder/confirm`,
         method: 'POST',
         body: {
-            performance_day: day,
-            payment_no: transactionResult.eventReservations[0].payment_no
+            orderNumber: transactionResult.orderNumber,
+            customer: { telephone: '+819012345678' },
+            // performance_day: day,
+            // payment_no: transactionResult.eventReservations[0].payment_no
         },
         expectedStatusCodes: [httpStatus.CREATED]
     })
