@@ -78,7 +78,7 @@
     "typescript": "4.1.3"
   },
   "dependencies": {
-    "@alverca/abstract-sdk": "10.1.0-alpha.0",
+    "@alverca/abstract-sdk": "10.1.0-alpha.1",
     "debug": "^3.2.6",
     "http-status": "^1.4.2",
     "isomorphic-fetch": "^2.2.1"

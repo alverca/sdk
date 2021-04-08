@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Added
 
 - 決済レポートサービスを追加
+- 経理レポートサービスを追加
 
 ### Changed
 
